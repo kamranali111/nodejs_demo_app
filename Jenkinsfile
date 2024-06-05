@@ -19,6 +19,7 @@ pipeline {
         stage('Sonar Analysis') {
             steps {
                 sh ''' 
+                npm install
                 npm install -g sonarqube-scanner
                 sonar-scanner \
                     -Dsonar.host.url=http://localhost:9000 \
