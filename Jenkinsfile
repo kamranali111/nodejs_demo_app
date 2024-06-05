@@ -18,6 +18,16 @@ pipeline {
             }
         }
 
+                        stage('SonarQube Code Scan') {
+            steps {
+
+                        sh ''' sonar-scanner -Dsonar.projectKey=simple-nodejs-app -Dsonar.sources=. -Dsonar.host.url=${env.SONARQUBE_URL} -Dsonar.login=${env.SONARQUBE_CREDENTIAL_ID}"
+                  '''
+            }
+        }
+
+
+
         stage('Build') {
             steps {
                 script {
@@ -28,15 +38,7 @@ pipeline {
         }
 
 
-                stage('SonarQube Code Scan') {
-            steps {
-                script {
-                    withSonarQubeEnv('SonarQube') {
-                        sh "sonar-scanner -Dsonar.projectKey=simple-nodejs-app -Dsonar.sources=. -Dsonar.host.url=${env.SONARQUBE_URL} -Dsonar.login=${env.SONARQUBE_CREDENTIAL_ID}"
-                    }
-                }
-            }
-        }
+
 
 
         stage('Push to Docker Hub') {
