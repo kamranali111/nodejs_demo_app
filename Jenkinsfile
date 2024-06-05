@@ -24,6 +24,7 @@ pipeline {
                 sonar-scanner -Dsonar.projectKey=simple-nodejs-app -Dsonar.sources=. -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_CREDENTIAL_ID}
                 '''
             }
+            
         }
 
         stage('Build') {
