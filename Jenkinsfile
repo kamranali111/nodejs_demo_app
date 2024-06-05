@@ -9,6 +9,11 @@ pipeline {
         TAG = 'latest'
     }
 
+    tools {
+        nodejs 'NodeJS_14' // Ensure this matches the name configured in Jenkins
+        jdk 'Java_17' // Ensure this matches the name configured in Jenkins
+    }
+
     stages {
         stage('Checkout') {
             steps {
