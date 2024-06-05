@@ -18,13 +18,15 @@ pipeline {
         }
 
         stage('SonarQube Code Scan') {
-            steps {
-                sh ''' 
-                    -Dsonar.host.url=http://localhost:9000 \
-                    -Dsonar.login=squ_785e9b47e00763dc0d448e729ce8b18d5aa26b65 \
-                    -Dsonar.projectKey=simple-nodejs-app
-                '''
-            }
+    steps {
+        
+          sh """
+            sonar-scanner \
+            -Dsonar.host.url=http://localhost:9000 \
+            -Dsonar.login=squ_785e9b47e00763dc0d448e729ce8b18d5aa26b65 \
+            -Dsonar.projectKey=simple-nodejs-app
+        """
+
 
         }
 
