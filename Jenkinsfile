@@ -11,23 +11,22 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
+           stages {
+        stage('Git Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/kamranali111/nodejs_demo_app.git'
+                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/kamranali111/nodejs_demo_app'
             }
         }
-
-        stage('SonarQube Code Scan') {
-    steps {
-
-          sh """
-            sonar-scanner \
-            -Dsonar.host.url=http://localhost:9000 \
-            -Dsonar.login=squ_785e9b47e00763dc0d448e729ce8b18d5aa26b65 \
-            -Dsonar.projectKey=simple-nodejs-app
-        """
-
-    }
+        
+        stage('Sonar Analysis') {
+            steps {
+                sh ''' 
+                  sonar:sonar \
+                    -Dsonar.host.url=http://localhost:9000 \
+                    -Dsonar.login=squ_785e9b47e00763dc0d448e729ce8b18d5aa26b65 \
+                    -Dsonar.projectKey=nodejs_demo_app
+                '''
+            }
         }
 
         stage('Build') {
