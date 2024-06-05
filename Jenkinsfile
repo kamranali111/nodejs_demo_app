@@ -19,7 +19,7 @@ pipeline {
 
         stage('SonarQube Code Scan') {
     steps {
-        
+
           sh """
             sonar-scanner \
             -Dsonar.host.url=http://localhost:9000 \
@@ -27,7 +27,7 @@ pipeline {
             -Dsonar.projectKey=simple-nodejs-app
         """
 
-
+    }
         }
 
         stage('Build') {
