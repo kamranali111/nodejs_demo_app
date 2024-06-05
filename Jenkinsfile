@@ -16,6 +16,18 @@ pipeline {
             }
         }
 
+        stage('Sonar Analysis') {
+            steps {
+                sh ''' 
+                npm install -g sonarqube-scanner
+                sonar-scanner \
+                    -Dsonar.host.url=http://localhost:9000 \
+                    -Dsonar.login=squ_785e9b47e00763dc0d448e729ce8b18d5aa26b65 \
+                    -Dsonar.projectKey=test-nodejs
+                '''
+            }
+        }
+
         stage('Build') {
             steps {
                 script {
