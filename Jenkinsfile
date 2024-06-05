@@ -64,4 +64,9 @@ pipeline {
                     sh "ssh -o StrictHostKeyChecking=no -i /home/kamran/aws-key.pem ubuntu@${AWS_EC2_INSTANCE} 'sudo docker pull $DOCKER_IMAGE_NAME:$TAG'"
                     
                     // Run Docker container on the AWS EC2 instance
-                    sh "ssh -o StrictHostKeyChecking=no -i /home/kam
+                    sh "ssh -o StrictHostKeyChecking=no -i /home/kamran/aws-key.pem ubuntu@${AWS_EC2_INSTANCE} 'sudo docker run -p 8001:8001 -d $DOCKER_IMAGE_NAME:$TAG'"
+                }
+            }
+        }
+    }
+}
