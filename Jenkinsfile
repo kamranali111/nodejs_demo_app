@@ -10,8 +10,8 @@ pipeline {
     }
 
     tools {
-        nodejs 'NodeJS_14' // Ensure this matches the name configured in Jenkins
-        jdk 'Java_17' // Ensure this matches the name configured in Jenkins
+        nodejs 'nodejs' // Corrected tool name for Node.js
+        jdk 'jdk17' // Corrected tool name for Java 17
     }
 
     stages {
