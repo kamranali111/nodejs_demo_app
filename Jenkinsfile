@@ -7,7 +7,8 @@ pipeline {
         DOCKER_IMAGE_NAME = 'kamran111/valleyjs'
         TAG = 'latest'
         SONARQUBE_CREDENTIAL_ID = 'squ_785e9b47e00763dc0d448e729ce8b18d5aa26b65'
-        SONARQUBE_URL = 'http://localhost:9000/'
+        SONARQUBE_CONTAINER_NAME = 'sonarqube'
+        SONARQUBE_URL = "http://localhost:9000/"
     }
 
     stages {
@@ -19,48 +20,34 @@ pipeline {
         
         stage('Sonar Analysis') {
             steps {
-                sh ''' 
-                  sonar:sonar \
-                    -Dsonar.host.url=http://localhost:9000 \
-                    -Dsonar.login=squ_785e9b47e00763dc0d448e729ce8b18d5aa26b65 \
-                    -Dsonar.projectKey=nodejs_demo_app
-                '''
+                script {
+                    // Execute SonarScanner for Node.js
+                    sh "docker run --rm \
+                        -v $(pwd):/usr/src \
+                        sonarsource/sonar-scanner-cli \
+                        -Dsonar.projectKey=nodejs_demo_app \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=${SONARQUBE_URL} \
+                        -Dsonar.login=${SONARQUBE_CREDENTIAL_ID}"
+                }
             }
         }
 
         stage('Build') {
             steps {
-                script {
-                    // Build Docker image locally
-                    sh "docker build --no-cache -t $DOCKER_IMAGE_NAME ."
-                }
+                // Your build steps for Node.js application
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: env.DOCKER_HUB_CREDENTIAL_ID, passwordVariable: 'DOCKER_HUB_PASSWORD', usernameVariable: 'DOCKER_HUB_USERNAME')]) {
-                        sh "docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD"
-                    }
-                    
-                    // Tag the Docker image
-                    sh "docker tag $DOCKER_IMAGE_NAME:$TAG $DOCKER_IMAGE_NAME"
-                    // Push the Docker image to Docker Hub
-                    sh "docker push $DOCKER_IMAGE_NAME"
-                }
+                // Your Docker push steps
             }
         }
 
         stage('Deploy') {
             steps {
-                script {
-                    // SSH into the AWS EC2 instance and pull the Docker image
-                    sh "ssh -o StrictHostKeyChecking=no -i /home/kamran/aws-key.pem ubuntu@${AWS_EC2_INSTANCE} 'sudo docker pull $DOCKER_IMAGE_NAME:$TAG'"
-                    
-                    // Run Docker container on the AWS EC2 instance
-                    sh "ssh -o StrictHostKeyChecking=no -i /home/kamran/aws-key.pem ubuntu@${AWS_EC2_INSTANCE} 'sudo docker run -p 8001:8001 -d $DOCKER_IMAGE_NAME:$TAG'"
-                }
+                // Your deployment steps
             }
         }
     }
