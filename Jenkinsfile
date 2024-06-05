@@ -7,6 +7,8 @@ pipeline {
         DOCKER_HUB_CREDENTIAL_ID = 'DOCKER_HUB_CREDENTIAL_ID'
         DOCKER_IMAGE_NAME = 'kamran111/valleyjs'
         TAG = 'latest'
+        SONARQUBE_CREDENTIAL_ID = 'squ_785e9b47e00763dc0d448e729ce8b18d5aa26b65'
+        SONARQUBE_URL = 'http://localhost:9000/'
     }
 
     stages {
@@ -24,6 +26,18 @@ pipeline {
                 }
             }
         }
+
+
+                stage('SonarQube Code Scan') {
+            steps {
+                script {
+                    withSonarQubeEnv('SonarQube') {
+                        sh "sonar-scanner -Dsonar.projectKey=simple-nodejs-app -Dsonar.sources=. -Dsonar.host.url=${env.SONARQUBE_URL} -Dsonar.login=${env.SONARQUBE_CREDENTIAL_ID}"
+                    }
+                }
+            }
+        }
+
 
         stage('Push to Docker Hub') {
             steps {
