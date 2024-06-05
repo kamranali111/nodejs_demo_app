@@ -20,8 +20,7 @@ pipeline {
             steps {
                 sh ''' 
                 npm install
-                npm install -g sonarqube-scanner
-                sonar-scanner \
+                npx sonarqube-scanner \
                     -Dsonar.host.url=http://localhost:9000 \
                     -Dsonar.login=squ_785e9b47e00763dc0d448e729ce8b18d5aa26b65 \
                     -Dsonar.projectKey=test-nodejs
@@ -37,12 +36,10 @@ pipeline {
                 }
             }
         }
-        
 
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    
                     withCredentials([usernamePassword(credentialsId: env.DOCKER_HUB_CREDENTIAL_ID, passwordVariable: 'DOCKER_HUB_PASSWORD', usernameVariable: 'DOCKER_HUB_USERNAME')]) {
                         sh "docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD"
                     }
