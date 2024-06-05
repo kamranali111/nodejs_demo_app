@@ -3,7 +3,6 @@ pipeline {
     
     environment {
         AWS_EC2_INSTANCE = '184.72.183.24'
-        
         DOCKER_HUB_CREDENTIAL_ID = 'DOCKER_HUB_CREDENTIAL_ID'
         DOCKER_IMAGE_NAME = 'kamran111/valleyjs'
         TAG = 'latest'
@@ -21,7 +20,7 @@ pipeline {
         stage('SonarQube Code Scan') {
             steps {
                 sh ''' 
-                sonar-scannar -Dsonar.projectKey=simple-nodejs-app -Dsonar.sources=. -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_CREDENTIAL_ID}
+                sonar-scanner -Dsonar.projectKey=simple-nodejs-app -Dsonar.sources=. -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_CREDENTIAL_ID}
                 '''
             }
 
