@@ -9,6 +9,10 @@ pipeline {
         TAG = 'latest'
     }
 
+    tools {
+        nodejs 'NodeJS_14' // Specify your NodeJS installation name here
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -18,8 +22,9 @@ pipeline {
 
         stage('Sonar Analysis') {
             steps {
-                sh ''' 
+                sh '''
                 npm install
+                npm install sonarqube-scanner@2.8.0
                 npx sonarqube-scanner \
                     -Dsonar.host.url=http://localhost:9000 \
                     -Dsonar.login=squ_785e9b47e00763dc0d448e729ce8b18d5aa26b65 \
