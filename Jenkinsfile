@@ -61,10 +61,10 @@ pipeline {
             steps {
                 script {
                     // SSH into the AWS EC2 instance and pull the Docker image
-                    sh "ssh -o StrictHostKeyChecking=no -i /home/kamran/Downloads/test-key.pem ubuntu@${AWS_EC2_INSTANCE} 'sudo docker pull $DOCKER_IMAGE_NAME:$TAG'"
+                    sh "ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/workspace/test-key.pem ubuntu@${AWS_EC2_INSTANCE} 'sudo docker pull $DOCKER_IMAGE_NAME:$TAG'"
                     
                     // Run Docker container on the AWS EC2 instance
-                    sh "ssh -o StrictHostKeyChecking=no -i /home/kamran/Downloads/test-key.pem ubuntu@${AWS_EC2_INSTANCE} 'sudo docker run -p 3000:3000 -d $DOCKER_IMAGE_NAME:$TAG'"
+                    sh "ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/workspace/test-key.pem ubuntu@${AWS_EC2_INSTANCE} 'sudo docker run -p 3000:3000 -d $DOCKER_IMAGE_NAME:$TAG'"
                 }
             }
         }
